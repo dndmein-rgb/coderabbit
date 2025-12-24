@@ -6,6 +6,7 @@ import {Input} from '@/components/ui/input'
 import {ExternalLink,Star,Search} from 'lucide-react'
 import {useState,useEffect,useRef} from 'react'
 import {useRepositories} from '@/module/repository/hooks/use-repositories'
+import {useConnectRepository} from "@/module/repository/hooks/use-connect-repository"
 import {RepositoryListSkeleton} from '@/module/repository/components/repository-skeleton'
 interface Repository{
     id:number,
@@ -19,6 +20,8 @@ interface Repository{
     isConnected?:boolean
 }
 const RepositoryPage = () => {
+
+    const {mutate:connectRepo}=useConnectRepository()
     const [localConnectingId,setLocalConnectingId]=useState<number|null>(null);
     const {data,isLoading,hasNextPage,fetchNextPage,isFetchingNextPage,isError}=useRepositories();
     const [searchQuery,setSearchQuery]=useState("")
@@ -62,11 +65,14 @@ const RepositoryPage = () => {
 )
  const handleConnect=async(repo:Repository)=>{
     setLocalConnectingId(repo.id);
-    try{
-      // TODO: Implement connect logic
-    }finally{
-      setLocalConnectingId(null);
+   connectRepo(
+    {owner:repo.full_name.split("/")[0],
+        repo:repo.name,
+        githubId:repo.id
+    },{
+        onSettled:()=>setLocalConnectingId(null)
     }
+   )
   }
   return (
     <div className="space-y-4">
