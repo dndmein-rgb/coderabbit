@@ -2,7 +2,7 @@
 
 <div align="center">
 
-**Cut Code Review Time & Bugs in Half. Instantly.**
+AI-powered code review platform for automated PR analysis
 
 SuperCharge your team to ship faster with the most Advanced AI code reviews.
 
